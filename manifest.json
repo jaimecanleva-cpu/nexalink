@@ -1,4 +1,4 @@
-{
+ {
   "name": "NexaLink",
   "short_name": "NexaLink",
   "description": "Aplicação NexaLink para transferência de ficheiros",
@@ -8,16 +8,16 @@
   "theme_color": "#00ff66",
   "icons": [
     {
-      "src": "profile.png",
+      "src": "icon-192x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "profile.png",
+      "src": "icon-512x512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any maskable"
+      "purpose": "maskable"
     }
   ]
 }
