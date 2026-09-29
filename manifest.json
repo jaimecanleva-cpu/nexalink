@@ -1,14 +1,14 @@
 {
   "name": "NexaLink",
   "short_name": "NexaLink",
-  "description": "Aplicação web PWA NexaLink",
+  "description": "Aplicação NexaLink para transferência de ficheiros",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#000000",
+  "background_color": "#000000",
+  "theme_color": "#00ff66",
   "icons": [
     {
-      "src": "https://via.placeholder.com/512.png",
+      "src": "profile.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
