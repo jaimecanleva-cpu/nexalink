@@ -1,0 +1,15 @@
+{
+  "short_name": "NexaLink",
+  "name": "NexaLink - Transferência de Ficheiros",
+  "icons": [
+    {
+      "src": "https://via.placeholder.com/192",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ],
+  "start_url": "./index.html",
+  "background_color": "#020202",
+  "theme_color": "#39ff14",
+  "display": "standalone"
+}

@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NexaLink - Mobile App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        :root {
+            --preto-fundo: #020202;
+            --card-fundo: #0d0d0d;
+            --card-borda: rgba(255, 255, 255, 0.08);
+            --verde-neon: #39ff14;
+            --verde-brilho: rgba(57, 255, 20, 0.4);
+            --cinza-texto: #888888;
+            --cinza-escuro: #161616;
+        }
+
+        body {
+            background-color: var(--preto-fundo);
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .mockup-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            justify-content: center;
+            align-items: flex-start;
+            max-width: 1100px;
+            width: 100%;
+        }
+
+        /* FRAME DO SMARTPHONE */
+        .phone-frame {
+            width: 380px;
+            height: 780px;
+            background: #000000;
+            border-radius: 48px;
+            border: 4px solid #333333;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .status-icons {
+            display: flex;
+            gap: 6px;
+        }
+
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 24px;
+        }
+
+        .menu-btn, .bell-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 22px;
+            cursor: pointer;
+        }
+
+        .app-title {
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .app-title span {
+            color: var(--verde-neon);
+        }
+
+        .app-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .app-body::-webkit-scrollbar { display: none; }
+
+        /* SISTEMA DE ABAS */
+        .tab-content {
+            display: none;
+            width: 100%;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .tab-content.active {
+            display: flex;
+        }
+
+        /* PERFIL */
+        .profile-avatar-container {
+            position: relative;
+            margin: 15px 0;
+        }
+
+        .profile-avatar {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--verde-neon);
+            box-shadow: 0 0 20px var(--verde-brilho);
+        }
+
+        .edit-icon-btn {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background: var(--verde-neon);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .user-name {
+            font-size: 22px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 4px;
+        }
+
+        .verified-badge {
+            background: var(--verde-neon);
+            color: #000;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .status-online {
+            color: var(--verde-neon);
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 20px;
+        }
+
+        .dot-online {
+            width: 8px;
+            height: 8px;
+            background: var(--verde-neon);
+            border-radius: 50%;
+            box-shadow: 0 0 6px var(--verde-neon);
+        }
+
+        /* CARDS E INPUTS */
+        .info-card {
+            background: var(--card-fundo);
+            border: 1px solid var(--card-borda);
+            border-radius: 16px;
+            width: 100%;
+            padding: 14px 16px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .info-card-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .icon-box {
+            width: 40px;
+            height: 40px;
+            background: var(--cinza-escuro);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--verde-neon);
+            font-size: 20px;
+        }
+
+        .card-label { font-size: 11px; color: var(--cinza-texto); }
+        .card-value { font-size: 15px; font-weight: 600; margin-top: 2px; }
+        .id-highlight { color: var(--verde-neon); letter-spacing: 1px; }
+
+        .copy-btn { background: none; border: none; color: var(--verde-neon); font-size: 18px; cursor: pointer; }
+
+        .input-box {
+            width: 100%;
+            padding: 12px 14px;
+            background: var(--cinza-escuro);
+            border: 1px solid var(--card-borda);
+            border-radius: 12px;
+            color: white;
+            font-size: 14px;
+            margin: 10px 0;
+            outline: none;
+        }
+
+        .input-box:focus { border-color: var(--verde-neon); }
+
+        .btn-action {
+            width: 100%;
+            padding: 14px;
+            background: var(--verde-neon);
+            color: #000;
+            border: none;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 14px;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        /* BOTTOM NAV */
+        .bottom-nav {
+            height: 65px;
+            background: #000000;
+            border-top: 1px solid var(--card-borda);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            color: var(--cinza-texto);
+            text-decoration: none;
+            font-size: 11px;
+            cursor: pointer;
+        }
+
+        .nav-item.active { color: var(--verde-neon); }
+        .nav-icon { font-size: 18px; }
+
+        /* PAINEL DIREITO */
+        .info-panel {
+            flex: 1;
+            min-width: 320px;
+            max-width: 480px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .panel-card {
+            background: var(--card-fundo);
+            border: 1px solid var(--card-borda);
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .panel-card-title {
+            color: var(--verde-neon);
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        .user-preview { display: flex; align-items: center; gap: 15px; }
+        .avatar-small { width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--verde-neon); object-fit: cover; }
+        .option-item { display: flex; align-items: center; justify-content: space-between; background: var(--cinza-escuro); border-radius: 12px; padding: 12px 16px; margin-bottom: 10px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div class="mockup-container">
+        <!-- SMARTPHONE -->
+        <div class="phone-frame">
+            <div class="status-bar">
+                <span>10:30</span>
+                <div class="status-icons"><span>📶</span><span>100%</span></div>
+            </div>
+
+            <div class="app-header">
+                <button class="menu-btn" onclick="alert('Menu do NexaLink')">☰</button>
+                <div class="app-title">Nexa<span>Link</span></div>
+                <button class="bell-btn" onclick="alert('Sem notificações pendentes.')">🔔</button>
+            </div>
+
+            <div class="app-body">
+                
+                <!-- ABA 1: PERFIL -->
+                <div id="tab-perfil" class="tab-content active">
+                    <div class="profile-avatar-container">
+                        <img id="mainAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80" alt="Foto de Perfil" class="profile-avatar">
+                        <button class="edit-icon-btn" onclick="triggerFileSelect()">✎</button>
+                    </div>
+
+                    <div class="user-name">Jaime Manuel <span class="verified-badge">✓</span></div>
+                    <div class="status-online" id="statusServer"><span class="dot-online" style="background: red;"></span> A conectar ao servidor...</div>
+
+                    <div class="info-card">
+                        <div class="info-card-left">
+                            <div class="icon-box">📱</div>
+                            <div>
+                                <div class="card-label">Meu Dispositivo</div>
+                                <div class="card-value">Jaime’s Android</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="info-card">
+                        <div class="info-card-left">
+                            <div class="icon-box">🛡️</div>
+                            <div>
+                                <div class="card-label">ID do Dispositivo</div>
+                                <div class="card-value id-highlight" id="myDeviceId">NX-0000-0000</div>
+                            </div>
+                        </div>
+                        <button class="copy-btn" onclick="copyId()">📋</button>
+                    </div>
+                </div>
+
+                <!-- ABA 2: ENVIAR ARQUIVOS -->
+                <div id="tab-enviar" class="tab-content">
+                    <h3 style="margin-bottom: 15px; color: var(--verde-neon);">Enviar Arquivos</h3>
+                    
+                    <div class="info-card" style="flex-direction: column; align-items: flex-start; width: 100%;">
+                        <label class="card-label">ID do Dispositivo Destino:</label>
+                        <input type="text" id="targetDeviceId" class="input-box" placeholder="Ex: NX-A1B2-C3D4">
+                        
+                        <label class="card-label" style="margin-top:10px;">Selecionar Ficheiro:</label>
+                        <input type="file" id="fileToSend" class="input-box">
+                        
+                        <button class="btn-action" onclick="iniciarEnvioArquivo()">Enviar via NexaLink</button>
+
+                        <!-- BARRA DE PROGRESSO INTEGRADA -->
+                        <div id="progressContainer" style="display: none; width: 100%; margin-top: 15px;">
+                            <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 5px; color: var(--cinza-texto);">
+                                <span id="progressStatus">A enviar...</span>
+                                <span id="progressPercent">0%</span>
+                            </div>
+                            <div style="width: 100%; height: 8px; background: var(--cinza-escuro); border-radius: 4px; overflow: hidden;">
+                                <div id="progressBar" style="width: 0%; height: 100%; background: var(--verde-neon); transition: width 0.2s;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ABA 3: RECEBER ARQUIVOS -->
+                <div id="tab-receber" class="tab-content">
+                    <h3 style="margin-bottom: 15px; color: var(--verde-neon);">Receber Arquivos</h3>
+                    <div class="info-card" style="text-align: center; flex-direction: column; width: 100%;">
+                        <p style="font-size: 13px; color: var(--cinza-texto);">Seu dispositivo está pronto para receber arquivos automaticamente quando outro usuário usar o seu ID abaixo:</p>
+                        <h2 class="id-highlight" id="displayReceiveId" style="margin: 15px 0;">NX-0000-0000</h2>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- BOTTOM NAVIGATION -->
+            <div class="bottom-nav">
+                <div class="nav-item active" onclick="switchTab('perfil', this)">
+                    <span class="nav-icon">👤</span><span>Perfil</span>
+                </div>
+                <div class="nav-item" onclick="switchTab('enviar', this)">
+                    <span class="nav-icon">↗</span><span>Enviar</span>
+                </div>
+                <div class="nav-item" onclick="switchTab('receber', this)">
+                    <span class="nav-icon">↙</span><span>Receber</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAINEL DIREITO -->
+        <div class="info-panel">
+            <div class="panel-card">
+                <div class="panel-card-title">PAINEL DE CONTROLE</div>
+                <div class="user-preview">
+                    <img id="sideAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80" class="avatar-small">
+                    <div>
+                        <div class="user-name" style="font-size: 16px;">Jaime Manuel <span class="verified-badge">✓</span></div>
+                        <div class="status-online" id="sideStatus" style="margin-bottom:0; font-size:12px;"><span class="dot-online" style="background: red;"></span> Desconectado</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-card">
+                <div class="panel-card-title">OPÇÕES DE FOTO DE PERFIL</div>
+                <div class="option-item" onclick="triggerFileSelect()">
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <span style="color:var(--verde-neon);">🖼️</span>
+                        <span>Escolher da galeria</span>
+                    </div>
+                    <span>❯</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- INPUT OCULTO DE IMAGEM -->
+    <input type="file" id="inputFotoGaleria" accept="image/*" style="display: none;" onchange="atualizarFotoPerfilLocal(event)">
+
+    <!-- SCRIPTS -->
+    <script>
+        const MY_DEVICE_ID = 'NX-' + Math.random().toString(36).substr(2, 4).toUpperCase() + '-' + Math.random().toString(36).substr(2, 4).toUpperCase();
+        
+        document.getElementById('myDeviceId').innerText = MY_DEVICE_ID;
+        document.getElementById('displayReceiveId').innerText = MY_DEVICE_ID;
+
+        function copyId() {
+            navigator.clipboard.writeText(MY_DEVICE_ID);
+            alert('ID copiado: ' + MY_DEVICE_ID);
+        }
+
+        function switchTab(tabId, element) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            
+            document.getElementById('tab-' + tabId).classList.add('active');
+            element.classList.add('active');
+        }
+
+        function triggerFileSelect() {
+            document.getElementById('inputFotoGaleria').click();
+        }
+
+        function atualizarFotoPerfilLocal(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('mainAvatar').src = e.target.result;
+                    document.getElementById('sideAvatar').src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Conexão WebSocket
+        const protocolo = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+        const host = window.location.hostname || 'localhost';
+        const ws = new WebSocket(`${protocolo}${host}:8080`);
+
+        ws.onopen = () => {
+            document.getElementById('statusServer').innerHTML = '<span class="dot-online"></span> Online no Servidor';
+            document.getElementById('sideStatus').innerHTML = '<span class="dot-online"></span> Conectado';
+            ws.send(JSON.stringify({ tipo: 'REGISTAR', id: MY_DEVICE_ID }));
+        };
+
+        ws.onclose = () => {
+            document.getElementById('statusServer').innerHTML = '<span class="dot-online" style="background:red;"></span> Desconectado';
+            document.getElementById('sideStatus').innerHTML = '<span class="dot-online" style="background:red;"></span> Desconectado';
+        };
+
+        function iniciarEnvioArquivo() {
+            const targetId = document.getElementById('targetDeviceId').value.trim();
+            const fileInput = document.getElementById('fileToSend');
+            const file = fileInput.files[0];
+
+            if (!targetId) return alert('Insira o ID de destino!');
+            if (!file) return alert('Selecione um arquivo!');
+
+            const CHUNK_SIZE = 64 * 1024;
+            let offset = 0;
+
+            const progressContainer = document.getElementById('progressContainer');
+            const progressBar = document.getElementById('progressBar');
+            const progressPercent = document.getElementById('progressPercent');
+            progressContainer.style.display = 'block';
+
+            ws.send(JSON.stringify({
+                tipo: 'INICIAR_ENVIO',
+                destinoId: targetId,
+                remetenteId: MY_DEVICE_ID,
+                nome: file.name,
+                tipoFicheiro: file.type,
+                tamanho: file.size
+            }));
+
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                ws.send(JSON.stringify({
+                    tipo: 'PEDACO_FICHEIRO',
+                    destinoId: targetId,
+                    dados: e.target.result
+                }));
+
+                offset += CHUNK_SIZE;
+                const percentual = Math.min(Math.round((offset / file.size) * 100), 100);
+                
+                progressBar.style.width = percentual + '%';
+                progressPercent.innerText = percentual + '%';
+
+                if (offset < file.size) {
+                    readNextChunk();
+                } else {
+                    ws.send(JSON.stringify({
+                        tipo: 'CONCLUIR_ENVIO',
+                        destinoId: targetId,
+                        nome: file.name
+                    }));
+
+                    setTimeout(() => {
+                        alert('Arquivo enviado com sucesso!');
+                        progressContainer.style.display = 'none';
+                        progressBar.style.width = '0%';
+                        progressPercent.innerText = '0%';
+                    }, 300);
+                }
+            };
+
+            function readNextChunk() {
+                const slice = file.slice(offset, offset + CHUNK_SIZE);
+                reader.readAsDataURL(slice);
+            }
+
+            readNextChunk();
+        }
+
+        let fileBuffer = { nome: '', tipo: '', pedacos: [] };
+
+        ws.onmessage = (event) => {
+            const msg = JSON.parse(event.data);
+
+            if (msg.tipo === 'INICIAR_ENVIO') {
+                fileBuffer = { nome: msg.nome, tipo: msg.tipoFicheiro, pedacos: [] };
+            }
+
+            if (msg.tipo === 'PEDACO_FICHEIRO') {
+                fileBuffer.pedacos.push(msg.dados);
+            }
+
+            if (msg.tipo === 'CONCLUIR_ENVIO') {
+                const completeData = fileBuffer.pedacos.join('');
+                
+                if (fileBuffer.tipo.startsWith('image/')) {
+                    document.getElementById('mainAvatar').src = completeData;
+                    document.getElementById('sideAvatar').src = completeData;
+                }
+
+                const link = document.createElement('a');
+                link.href = completeData;
+                link.download = fileBuffer.nome;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                alert(`Você recebeu o arquivo: ${fileBuffer.nome}`);
+            }
+
+            if (msg.tipo === 'ERRO') {
+                alert(msg.mensagem);
+            }
+        };
+    </script>
+</body>
+</html>
